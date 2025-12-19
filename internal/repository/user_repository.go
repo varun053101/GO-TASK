@@ -52,3 +52,11 @@ func (r *UserRepository) UpdateUser(
 		Dob:  dob,
 	})
 }
+
+// delete user by id
+func (r *UserRepository) DeleteUser(
+	ctx context.Context,
+	id int32,
+) error {
+	return r.q.DeleteUser(ctx, id)
+}

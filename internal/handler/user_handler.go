@@ -138,3 +138,22 @@ func (h *UserHandler) UpdateUser(c *fiber.Ctx) error {
 		"dob":  user.Dob.Time.Format("2006-01-02"),
 	})
 }
+
+// DELETE /users/:id
+func (h *UserHandler) DeleteUser(c *fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"error": "invalid user id",
+		})
+	}
+
+	err = h.repo.DeleteUser(c.Context(), int32(id))
+	if err != nil {
+		return c.Status(404).JSON(fiber.Map{
+			"error": "user not found",
+		})
+	}
+
+	return c.SendStatus(fiber.StatusNoContent)
+}

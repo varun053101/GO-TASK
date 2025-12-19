@@ -50,6 +50,9 @@ func main() {
 	// Update User
 	app.Put("/users/:id", userHandler.UpdateUser)
 
+	// Delete User by user id
+	app.Delete("/users/:id", userHandler.DeleteUser)
+
 	// start the server
 	err := app.Listen(":" + cfg.ServerPort)
 	if err != nil {

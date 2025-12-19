@@ -25,3 +25,9 @@ WHERE
     dob,
     created_at,
     updated_at;
+
+-- name: DeleteUser :exec
+DELETE FROM
+    users
+WHERE
+    id = $1;
