@@ -4,10 +4,13 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/varun053101/GO-TASK/internal/repository"
 )
+
+var validate = validator.New()
 
 // handles user related http requests
 type UserHandler struct {
@@ -21,13 +24,13 @@ func NewUserHandler(repo *repository.UserRepository) *UserHandler {
 
 // request body for creating user
 type createUserRequest struct {
-	Name string `json:"name"`
-	DOB  string `json:"dob"` // yyyy-mm-dd
+	Name string `json:"name" validate:"required"`
+	DOB  string `json:"dob" validate:"required"` // yyyy-mm-dd
 }
 
 type updateUserRequest struct {
-	Name string `json:"name"`
-	DOB  string `json:"dob"`
+	Name string `json:"name" validate:"required"`
+	DOB  string `json:"dob" validate:"required"`
 }
 
 // POST /users
@@ -36,6 +39,12 @@ func (h *UserHandler) CreateUser(c *fiber.Ctx) error {
 	if err := c.BodyParser(&req); err != nil {
 		return c.Status(400).JSON(fiber.Map{
 			"error": "invalid request body",
+		})
+	}
+
+	if err := validate.Struct(req); err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"error": "invalid request data",
 		})
 	}
 
@@ -110,6 +119,12 @@ func (h *UserHandler) UpdateUser(c *fiber.Ctx) error {
 	if err := c.BodyParser(&req); err != nil {
 		return c.Status(400).JSON(fiber.Map{
 			"error": "invalid request body",
+		})
+	}
+
+	if err := validate.Struct(req); err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"error": "invalid request data",
 		})
 	}
 

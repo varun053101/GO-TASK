@@ -70,3 +70,6 @@ This keeps the user information editable while still calculating age dynamically
 instead of storing it in the database.
 
 I added an API to list all users.
+
+Lastly I added request validation using go-playground validator
+to ensure required fields are present and handlers remain clean.
