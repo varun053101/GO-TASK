@@ -34,3 +34,29 @@ I added a central database connection file in the repository layer
 so sqlc queries can share a single connection pool.
 And I verified the database connection by pinging Postgres during startup
 to make sure the app can connect before serving requests.
+
+Created user handlers and the required database tables manually before running
+the application, keeping migration execution separate from app logic.
+- Use command
+
+```powershell
+    docker exec -it task-postgres psql -U postgres -d go-task
+```
+- paste this code
+
+```sql
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  dob DATE NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+```
+veryfy using
+
+```sql
+    \dt
+```
+
+I also remove migration files since they are not working for me

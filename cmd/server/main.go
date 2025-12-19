@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 	"github.com/varun053101/GO-TASK/config"
+	"github.com/varun053101/GO-TASK/internal/handler"
 	"github.com/varun053101/GO-TASK/internal/logger"
 	"github.com/varun053101/GO-TASK/internal/middleware"
 	"github.com/varun053101/GO-TASK/internal/repository"
@@ -13,7 +14,7 @@ import (
 func main() {
 
 	_ = godotenv.Load()
-	
+
 	// initialize logger
 	logger.Init()
 	defer logger.Log.Sync()
@@ -37,6 +38,11 @@ func main() {
 			"status": "ok",
 		})
 	})
+
+	userRepo := repository.NewUserRepository()
+	userHandler := handler.NewUserHandler(userRepo)
+
+	app.Post("/users", userHandler.CreateUser)
 
 	// start the server
 	err := app.Listen(":" + cfg.ServerPort)
