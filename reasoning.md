@@ -26,3 +26,6 @@ I added sqlc configuration so database queries can be generated
 in a type-safe way when repositories are implemented.
 And later I added a basic query to verify that sqlc generation works
 before adding actual repository logic.
+
+Added basic user queries and regenerated sqlc code
+to make sure the database layer is ready before using it.

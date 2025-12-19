@@ -7,37 +7,49 @@ package sqlc
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const getUsers = `-- name: GetUsers :many
-SELECT
-    id, name, dob, created_at, updated_at
-FROM
-    users
+const createUser = `-- name: CreateUser :one
+INSERT INTO users (name, dob)
+VALUES ($1, $2)
+RETURNING id, name, dob, created_at, updated_at
 `
 
-func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
-	rows, err := q.db.Query(ctx, getUsers)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []User
-	for rows.Next() {
-		var i User
-		if err := rows.Scan(
-			&i.ID,
-			&i.Name,
-			&i.Dob,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
+type CreateUserParams struct {
+	Name string      `json:"name"`
+	Dob  pgtype.Date `json:"dob"`
+}
+
+func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
+	row := q.db.QueryRow(ctx, createUser, arg.Name, arg.Dob)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Dob,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getUserByID = `-- name: GetUserByID :one
+SELECT id, name, dob, created_at, updated_at
+FROM users
+WHERE id = $1
+`
+
+func (q *Queries) GetUserByID(ctx context.Context, id int32) (User, error) {
+	row := q.db.QueryRow(ctx, getUserByID, id)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Dob,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
