@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/varun053101/GO-TASK/config"
 	"github.com/varun053101/GO-TASK/internal/logger"
 	"go.uber.org/zap"
 )
@@ -23,7 +24,8 @@ func main() {
 	})
 
 	// start the server
-	err := app.Listen(":8080")
+	cfg := config.Load()
+	err := app.Listen(":" + cfg.ServerPort)
 	if err != nil {
 		logger.Log.Fatal("server failed to start", zap.Error(err))
 	}
