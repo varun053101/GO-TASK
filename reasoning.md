@@ -15,3 +15,6 @@ and makes debugging easier before adding database logic.
 
 I added database related configuration early so connection details
 are not hardcoded and can be changed easily later.
+
+I set up PostgreSQL using Docker so I can run the database locally
+while working on the backend.
