@@ -157,3 +157,27 @@ func (h *UserHandler) DeleteUser(c *fiber.Ctx) error {
 
 	return c.SendStatus(fiber.StatusNoContent)
 }
+
+// GET /users
+func (h *UserHandler) ListUsers(c *fiber.Ctx) error {
+	users, err := h.repo.ListUsers(c.Context())
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"error": "failed to fetch users",
+		})
+	}
+
+	response := make([]fiber.Map, 0, len(users))
+	for _, user := range users {
+		age := int(time.Since(user.Dob.Time).Hours() / 24 / 365)
+
+		response = append(response, fiber.Map{
+			"id":   user.ID,
+			"name": user.Name,
+			"dob":  user.Dob.Time.Format("2006-01-02"),
+			"age":  age,
+		})
+	}
+
+	return c.JSON(response)
+}

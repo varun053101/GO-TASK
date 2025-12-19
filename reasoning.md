@@ -68,3 +68,5 @@ I added an update user API to allow modifying existing user details.
 The API updates only the name and date of birth and returns the updated data.
 This keeps the user information editable while still calculating age dynamically
 instead of storing it in the database.
+
+I added an API to list all users.

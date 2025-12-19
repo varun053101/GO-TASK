@@ -53,6 +53,9 @@ func main() {
 	// Delete User by user id
 	app.Delete("/users/:id", userHandler.DeleteUser)
 
+	// Get All users
+	app.Get("/users", userHandler.ListUsers)
+
 	// start the server
 	err := app.Listen(":" + cfg.ServerPort)
 	if err != nil {

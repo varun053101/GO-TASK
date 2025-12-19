@@ -31,3 +31,15 @@ DELETE FROM
     users
 WHERE
     id = $1;
+
+-- name: ListUsers :many
+SELECT
+    id,
+    name,
+    dob,
+    created_at,
+    updated_at
+FROM
+    users
+ORDER BY
+    id;

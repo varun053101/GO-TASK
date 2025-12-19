@@ -60,3 +60,10 @@ func (r *UserRepository) DeleteUser(
 ) error {
 	return r.q.DeleteUser(ctx, id)
 }
+
+// list all users
+func (r *UserRepository) ListUsers(
+	ctx context.Context,
+) ([]sqlc.User, error) {
+	return r.q.ListUsers(ctx)
+}
