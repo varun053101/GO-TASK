@@ -21,3 +21,8 @@ while working on the backend.
 
 I added a migration to create the users table so the database structure
 is defined before writing any queries.
+
+I added sqlc configuration so database queries can be generated
+in a type-safe way when repositories are implemented.
+And later I added a basic query to verify that sqlc generation works
+before adding actual repository logic.
