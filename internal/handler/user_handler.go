@@ -25,6 +25,11 @@ type createUserRequest struct {
 	DOB  string `json:"dob"` // yyyy-mm-dd
 }
 
+type updateUserRequest struct {
+	Name string `json:"name"`
+	DOB  string `json:"dob"`
+}
+
 // POST /users
 func (h *UserHandler) CreateUser(c *fiber.Ctx) error {
 	var req createUserRequest
@@ -89,5 +94,47 @@ func (h *UserHandler) GetUserByID(c *fiber.Ctx) error {
 		"name": user.Name,
 		"dob":  user.Dob.Time.Format("2006-01-02"),
 		"age":  age,
+	})
+}
+
+// PUT /users/:id
+func (h *UserHandler) UpdateUser(c *fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"error": "invalid user id",
+		})
+	}
+
+	var req updateUserRequest
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"error": "invalid request body",
+		})
+	}
+
+	dob, err := time.Parse("2006-01-02", req.DOB)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"error": "invalid dob format",
+		})
+	}
+
+	user, err := h.repo.UpdateUser(
+		c.Context(),
+		int32(id),
+		req.Name,
+		pgtype.Date{Time: dob, Valid: true},
+	)
+	if err != nil {
+		return c.Status(404).JSON(fiber.Map{
+			"error": "user not found",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"id":   user.ID,
+		"name": user.Name,
+		"dob":  user.Dob.Time.Format("2006-01-02"),
 	})
 }

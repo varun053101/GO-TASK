@@ -63,3 +63,8 @@ I also remove migration files since they are not working for me
 
 Added an API to fetch a user by id so basic read
 operations are supported along with user creation.
+
+I added an update user API to allow modifying existing user details.
+The API updates only the name and date of birth and returns the updated data.
+This keeps the user information editable while still calculating age dynamically
+instead of storing it in the database.

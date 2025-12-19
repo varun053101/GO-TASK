@@ -1,9 +1,27 @@
 -- name: CreateUser :one
-INSERT INTO users (name, dob)
-VALUES ($1, $2)
-RETURNING *;
+INSERT INTO
+    users (name, dob)
+VALUES
+    ($1, $2) RETURNING *;
 
 -- name: GetUserByID :one
-SELECT *
-FROM users
-WHERE id = $1;
+SELECT
+    *
+FROM
+    users
+WHERE
+    id = $1;
+
+-- name: UpdateUser :one
+UPDATE
+    users
+SET
+    name = $2,
+    dob = $3,
+    updated_at = NOW()
+WHERE
+    id = $1 RETURNING id,
+    name,
+    dob,
+    created_at,
+    updated_at;

@@ -43,8 +43,12 @@ func main() {
 	userHandler := handler.NewUserHandler(userRepo)
 	// Create a User
 	app.Post("/users", userHandler.CreateUser)
+
 	// Get user by user id
 	app.Get("/users/:id", userHandler.GetUserByID)
+
+	// Update User
+	app.Put("/users/:id", userHandler.UpdateUser)
 
 	// start the server
 	err := app.Listen(":" + cfg.ServerPort)

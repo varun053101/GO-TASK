@@ -38,3 +38,17 @@ func (r *UserRepository) GetUserByID(
 ) (sqlc.User, error) {
 	return r.q.GetUserByID(ctx, id)
 }
+
+// update user by id
+func (r *UserRepository) UpdateUser(
+	ctx context.Context,
+	id int32,
+	name string,
+	dob pgtype.Date,
+) (sqlc.User, error) {
+	return r.q.UpdateUser(ctx, sqlc.UpdateUserParams{
+		ID:   id,
+		Name: name,
+		Dob:  dob,
+	})
+}
