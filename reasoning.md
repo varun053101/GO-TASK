@@ -8,3 +8,7 @@ that the server is running as expected.
 
 I added basic config loading to avoid hardcoding values.
 For now, only the server port is configurable.
+
+The server is healthy so I added a simple request logger.
+This helps me see incoming requests and responses while developing,
+and makes debugging easier before adding database logic.
