@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -56,6 +57,34 @@ func (h *UserHandler) CreateUser(c *fiber.Ctx) error {
 	age := int(time.Since(user.Dob.Time).Hours() / 24 / 365)
 
 	return c.Status(201).JSON(fiber.Map{
+		"id":   user.ID,
+		"name": user.Name,
+		"dob":  user.Dob.Time.Format("2006-01-02"),
+		"age":  age,
+	})
+}
+
+// GET /users/:id
+func (h *UserHandler) GetUserByID(c *fiber.Ctx) error {
+	idParam := c.Params("id")
+
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"error": "invalid user id",
+		})
+	}
+
+	user, err := h.repo.GetUserByID(c.Context(), int32(id))
+	if err != nil {
+		return c.Status(404).JSON(fiber.Map{
+			"error": "user not found",
+		})
+	}
+
+	age := int(time.Since(user.Dob.Time).Hours() / 24 / 365)
+
+	return c.JSON(fiber.Map{
 		"id":   user.ID,
 		"name": user.Name,
 		"dob":  user.Dob.Time.Format("2006-01-02"),

@@ -60,3 +60,6 @@ veryfy using
 ```
 
 I also remove migration files since they are not working for me
+
+Added an API to fetch a user by id so basic read
+operations are supported along with user creation.
