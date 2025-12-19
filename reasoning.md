@@ -29,3 +29,8 @@ before adding actual repository logic.
 
 Added basic user queries and regenerated sqlc code
 to make sure the database layer is ready before using it.
+
+I added a central database connection file in the repository layer
+so sqlc queries can share a single connection pool.
+And I verified the database connection by pinging Postgres during startup
+to make sure the app can connect before serving requests.

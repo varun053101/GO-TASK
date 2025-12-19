@@ -2,16 +2,29 @@ package main
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
 	"github.com/varun053101/GO-TASK/config"
 	"github.com/varun053101/GO-TASK/internal/logger"
 	"github.com/varun053101/GO-TASK/internal/middleware"
+	"github.com/varun053101/GO-TASK/internal/repository"
 	"go.uber.org/zap"
 )
 
 func main() {
+
+	_ = godotenv.Load()
+	
 	// initialize logger
 	logger.Init()
 	defer logger.Log.Sync()
+
+	// load config
+	cfg := config.Load()
+
+	// connect to database
+	if err := repository.Connect(cfg); err != nil {
+		logger.Log.Fatal("failed to connect to database", zap.Error(err))
+	}
 
 	// create fiber app
 	app := fiber.New()
@@ -26,7 +39,6 @@ func main() {
 	})
 
 	// start the server
-	cfg := config.Load()
 	err := app.Listen(":" + cfg.ServerPort)
 	if err != nil {
 		logger.Log.Fatal("server failed to start", zap.Error(err))
