@@ -12,3 +12,6 @@ For now, only the server port is configurable.
 The server is healthy so I added a simple request logger.
 This helps me see incoming requests and responses while developing,
 and makes debugging easier before adding database logic.
+
+I added database related configuration early so connection details
+are not hardcoded and can be changed easily later.
