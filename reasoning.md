@@ -18,3 +18,6 @@ are not hardcoded and can be changed easily later.
 
 I set up PostgreSQL using Docker so I can run the database locally
 while working on the backend.
+
+I added a migration to create the users table so the database structure
+is defined before writing any queries.
